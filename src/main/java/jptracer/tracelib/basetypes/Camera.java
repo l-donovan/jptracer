@@ -1,13 +1,29 @@
 package jptracer.tracelib.basetypes;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jptracer.tracelib.helper.Vec3;
 
 public class Camera {
-    public double fov, aspectRatio, scale, cos_rx, cos_ry, cos_rz, sin_rx, sin_ry, sin_rz;
+    public double fov, xScale, yScale, cos_rx, cos_ry, cos_rz, sin_rx, sin_ry, sin_rz;
     public int res_x, res_y;
     public Vec3 pos, rot;
 
     public Camera() {}
+
+    @JsonCreator
+    public Camera(
+            @JsonProperty("fov") double fov,
+            @JsonProperty("pos") Vec3 pos,
+            @JsonProperty("rot") Vec3 rot,
+            @JsonProperty("res") int[] res) {
+        this.fov = fov;
+        this.pos = pos;
+        this.rot = rot;
+        this.res_x = res[0];
+        this.res_y = res[1];
+        this.updateCachedValues();
+    }
 
     public Camera withFOV(double fov) {
         this.fov = fov;
@@ -38,7 +54,7 @@ public class Camera {
         this.sin_ry = Math.sin(this.rot.y);
         this.sin_rz = Math.sin(this.rot.z);
 
-        this.aspectRatio = 1.0 * this.res_x / this.res_y;
-        this.scale = Math.tan(Math.toRadians(this.fov / 2.0));
+        this.yScale = Math.tan(Math.toRadians(this.fov / 2.0));
+        this.xScale = this.yScale * this.res_x / this.res_y;
     }
 }

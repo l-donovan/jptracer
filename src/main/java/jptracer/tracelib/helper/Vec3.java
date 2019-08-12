@@ -1,7 +1,12 @@
 package jptracer.tracelib.helper;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 public class Vec3 {
     public double x, y, z;
+
+    public Vec3() {}
 
     public Vec3(double x, double y, double z) {
         this.x = x;
@@ -47,12 +52,36 @@ public class Vec3 {
         return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
     }
 
+    public void eqadd(double n) {
+        this.x += n;
+        this.y += n;
+        this.z += n;
+    }
+
+    public void eqadd(Vec3 v) {
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
+    }
+
     public Vec3 sub(double n) {
         return new Vec3(this.x - n, this.y - n, this.z - n);
     }
 
     public Vec3 sub(Vec3 v) {
         return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z);
+    }
+
+    public void eqsub(double n) {
+        this.x -= n;
+        this.y -= n;
+        this.z -= n;
+    }
+
+    public void eqsub(Vec3 v) {
+        this.x -= v.x;
+        this.y -= v.y;
+        this.z -= v.z;
     }
 
     public Vec3 mul(double n) {
@@ -63,12 +92,36 @@ public class Vec3 {
         return new Vec3(this.x * v.x, this.y * v.y, this.z * v.z);
     }
 
+    public void eqmul(double n) {
+        this.x *= n;
+        this.y *= n;
+        this.z *= n;
+    }
+
+    public void eqmul(Vec3 v) {
+        this.x *= v.x;
+        this.y *= v.y;
+        this.z *= v.z;
+    }
+
     public Vec3 div(double n) {
         return new Vec3(this.x / n, this.y / n, this.z / n);
     }
 
     public Vec3 div(Vec3 v) {
         return new Vec3(this.x / v.x, this.y / v.y, this.z / v.z);
+    }
+
+    public void eqdiv(double n) {
+        this.x /= n;
+        this.y /= n;
+        this.z /= n;
+    }
+
+    public void eqdiv(Vec3 v) {
+        this.x /= v.x;
+        this.y /= v.y;
+        this.z /= v.z;
     }
 
     public Vec3 neg() {

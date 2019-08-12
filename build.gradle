@@ -3,6 +3,14 @@ plugins {
     id 'application'
 }
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0.pr1'
+}
+
 application {
     mainClassName = 'jptracer.Main'
 }

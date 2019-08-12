@@ -1,20 +1,26 @@
 package jptracer.tracelib.primitives;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jptracer.tracelib.basetypes.Intersection;
 import jptracer.tracelib.basetypes.SceneObject;
 import jptracer.tracelib.helper.Vec3;
 
+import java.io.Serializable;
+
 import static jptracer.tracelib.basetypes.Intersection.getPlanarNormal;
 
-public class Plane implements SceneObject {
-    private Vec3 v0, v1, v2;
-    private String materialName;
+public class Plane extends SceneObject implements Serializable {
+    public Vec3 v0, v1, v2;
 
-    public Plane(Vec3 v0, Vec3 v1, Vec3 v2, String materialName) {
-        this.v0 = v0;
-        this.v1 = v1;
-        this.v2 = v2;
+    @JsonCreator
+    public Plane(
+            @JsonProperty("materialName") String materialName,
+            @JsonProperty("vertices") Vec3[] vertices) {
         this.materialName = materialName;
+        this.v0 = vertices[0];
+        this.v1 = vertices[1];
+        this.v2 = vertices[2];
     }
 
     @Override
@@ -42,10 +48,5 @@ public class Plane implements SceneObject {
     @Override
     public Vec3 normal(Vec3 p, Vec3 q) {
         return getPlanarNormal(p, this.v0, this.v1, this.v2);
-    }
-
-    @Override
-    public String getMaterialName() {
-        return this.materialName;
     }
 }

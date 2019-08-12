@@ -1,16 +1,21 @@
 package jptracer.tracelib.primitives;
 
-import jptracer.tracelib.Core;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jptracer.tracelib.basetypes.Intersection;
 import jptracer.tracelib.basetypes.SceneObject;
+import jptracer.tracelib.helper.MathUtils;
 import jptracer.tracelib.helper.Vec3;
 
-public class Sphere implements SceneObject {
+public class Sphere extends SceneObject {
     private Vec3 pos;
     private double radius2;
-    private String materialName;
 
-    public Sphere(Vec3 pos, double radius, String materialName) {
+    @JsonCreator
+    public Sphere(
+            @JsonProperty("pos") Vec3 pos,
+            @JsonProperty("radius") double radius,
+            @JsonProperty("materialName") String materialName) {
         this.pos = pos;
         this.radius2 = Math.pow(radius, 2.0);
         this.materialName = materialName;
@@ -32,7 +37,7 @@ public class Sphere implements SceneObject {
             return Intersection.NO_INTERSECTION;
         }
 
-        double t = Core.minPositive(-b - Math.sqrt(discr), -b + Math.sqrt(discr));
+        double t = MathUtils.minPositive(-b - Math.sqrt(discr), -b + Math.sqrt(discr));
         Vec3 q = pos.add(dir.mul(t));
 
         return new Intersection(true, t, q, this);
@@ -41,10 +46,5 @@ public class Sphere implements SceneObject {
     @Override
     public Vec3 normal(Vec3 p, Vec3 q) {
         return q.sub(this.pos).norm();
-    }
-
-    @Override
-    public String getMaterialName() {
-        return this.materialName;
     }
 }

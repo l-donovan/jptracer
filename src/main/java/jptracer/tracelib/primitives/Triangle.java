@@ -6,9 +6,10 @@ import jptracer.tracelib.helper.Vec3;
 
 import static jptracer.tracelib.basetypes.Intersection.getPlanarNormal;
 
-public class Triangle implements SceneObject {
-    private Vec3 v0, v1, v2;
-    private String materialName;
+public class Triangle extends SceneObject {
+    public Vec3 v0, v1, v2;
+
+    public Triangle() {}
 
     public Triangle(Vec3 v0, Vec3 v1, Vec3 v2, String materialName) {
         this.v0 = v0;
@@ -48,10 +49,5 @@ public class Triangle implements SceneObject {
     @Override
     public Vec3 normal(Vec3 p, Vec3 q) {
         return getPlanarNormal(p, this.v0, this.v0, this.v2);
-    }
-
-    @Override
-    public String getMaterialName() {
-        return this.materialName;
     }
 }

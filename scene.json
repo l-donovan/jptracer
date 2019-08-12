@@ -1,0 +1,263 @@
+{
+  "scene": {
+    "backgroundColor": [
+      0.286275,
+      0.592157,
+      0.815686
+    ],
+    "objects": [
+      {
+        "type": "sphere",
+        "materialName": "glossy",
+        "pos": [
+          -1.0,
+          1.0,
+          7.0
+        ],
+        "radius": 2.0
+      },
+      {
+        "type": "sphere",
+        "materialName": "mirror",
+        "pos": [
+          -0.75,
+          -1.0,
+          12.0
+        ],
+        "radius": 2.0
+      },
+      {
+        "type": "sphere",
+        "materialName": "mirror",
+        "pos": [
+          3.0,
+          0.5,
+          6.0
+        ],
+        "radius": 1.5
+      },
+      {
+        "type": "sphere",
+        "materialName": "glass",
+        "pos": [
+          2.5,
+          0.0,
+          4.0
+        ],
+        "radius": 1.0
+      },
+      {
+        "type": "plane",
+        "materialName": "floor",
+        "vertices": [
+          [
+            0.0,
+            -5.0,
+            0.0
+          ],
+          [
+            1.0,
+            -5.0,
+            0.0
+          ],
+          [
+            1.0,
+            -5.0,
+            1.0
+          ]
+        ]
+      },
+      {
+        "type": "sphere",
+        "materialName": "red-light",
+        "pos": [
+          -20.0,
+          70.0,
+          -20.0
+        ],
+        "radius": 1.5
+      },
+      {
+        "type": "sphere",
+        "materialName": "white-light",
+        "pos": [
+          30.0,
+          50.0,
+          12.0
+        ],
+        "radius": 10.0
+      }
+    ],
+    "materials": {
+      "white-light": {
+        "reflectance": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "refractance": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "emittance": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "bsdf": {
+          "type": "glossy",
+          "diffuseColor": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "glossy": {
+        "reflectance": [
+          0.9,
+          0.9,
+          0.9
+        ],
+        "refractance": [
+          0.1,
+          0.1,
+          0.1
+        ],
+        "emittance": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "bsdf": {
+          "type": "glossy",
+          "diffuseColor": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "glass": {
+        "reflectance": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "refractance": [
+          0.6,
+          0.6,
+          0.6
+        ],
+        "emittance": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "bsdf": {
+          "type": "glass",
+          "ior": 1.52
+        }
+      },
+      "mirror": {
+        "reflectance": [
+          0.9,
+          0.9,
+          0.9
+        ],
+        "refractance": [
+          0.1,
+          0.1,
+          0.1
+        ],
+        "emittance": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "bsdf": {
+          "type": "mirror",
+          "specularColor": [
+            0.8,
+            0.7,
+            0.2
+          ]
+        }
+      },
+      "floor": {
+        "reflectance": [
+          0.2,
+          0.2,
+          0.2
+        ],
+        "refractance": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "emittance": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "bsdf": {
+          "type": "lambert",
+          "diffuseColor": [
+            0.3,
+            0.3,
+            0.8
+          ]
+        }
+      },
+      "red-light": {
+        "reflectance": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "refractance": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "emittance": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "bsdf": {
+          "type": "glossy",
+          "diffuseColor": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      }
+    }
+  },
+  "camera": {
+    "fov": 90.0,
+    "res": [
+      1920,
+      1080
+    ],
+    "pos": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rot": [
+      0.0,
+      0.0,
+      0.25
+    ]
+  },
+  "options": {
+    "maxDepth": 16,
+    "procCount": 6,
+    "sampleCount": 16,
+    "bias": 1.0e-5
+  }
+}

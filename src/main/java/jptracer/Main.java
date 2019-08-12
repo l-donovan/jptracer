@@ -1,52 +1,44 @@
 package jptracer;
 
-import jptracer.tracelib.*;
 import jptracer.tracelib.basetypes.*;
+import jptracer.tracelib.common.Core;
 import jptracer.tracelib.helper.Vec3;
-import jptracer.tracelib.primitives.Plane;
-import jptracer.tracelib.primitives.Sphere;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
-import static jptracer.tracelib.Core.STD_COLORS;
-import static jptracer.tracelib.Core.STD_MATERIALS;
+import static jptracer.tracelib.common.Core.loadScene;
 
 public class Main {
-    private static Scene scene = new Scene()
-        .withBackgroundColor(STD_COLORS.get("celestial-blue"))
-        .withMaterials(STD_MATERIALS)
-        .withObjects(new SceneObject[] {
-            new Sphere(new Vec3(-1.0, 1.0, 7.0), 2.0, "glass"),
-            new Sphere(new Vec3(-0.75, -1.0, 12.0), 2.0, "mirror"),
-            new Sphere(new Vec3(3.0, 0.5, 6.0), 1.5, "mirror"),
-            new Sphere(new Vec3(2.5, 0.0, 4.0), 1.0, "glass"),
-            new Plane(new Vec3(0, -5, 0), new Vec3(1, -5, 0), new Vec3(1, -5, 1), "floor"),
-            new Sphere(new Vec3(-20,  70, -20), 1.5, "red-light"),
-            new Sphere(new Vec3(30,  50,  12), 10.0, "white-light"),
-        });
-
-    private static Camera camera = new Camera()
-        .withFOV(90.0)
-        .withRes(1920, 1080)
-        .withPos(new Vec3(0, 0, 0))
-        .withRot(new Vec3(0, 0, 0.25));
-
-    private static Options options = new Options()
-        .withMaxDepth(5)
-        .withProcCount(6)
-        .withSampleCount(256);
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        Vec3[][] screen = Core.renderScene(scene, camera, options);
-        BufferedImage img = Core.pixelsToImage(screen);
-        try {
-            File file = new File("render.bmp");
-            ImageIO.write(img, "bmp", file);
-        } catch (IOException e) {
-            e.printStackTrace();
+        // The following line is for testing purposes only
+        args = new String[] { "scene.json", "render.bmp" };
+
+        if (args.length < 2) {
+            System.out.println("Usage: jptracer <scene> <outfile>");
+            System.exit(1);
+        } else {
+            try {
+                SceneContainer c = loadScene(args[0]);
+                Vec3[][] screen = Core.renderScene(c.scene, c.camera, c.options);
+                BufferedImage img = Core.pixelsToImage(screen);
+                File file = new File(args[1]);
+                int dot = args[1].indexOf('.');
+                if (dot == -1) {
+                    logger.severe("No extension provided for output image!");
+                    System.exit(1);
+                } else {
+                    ImageIO.write(img, args[1].substring(dot + 1), file);
+                    System.exit(0);
+                }
+            } catch (IOException e) {
+                logger.severe(e.toString());
+            }
         }
     }
 }
