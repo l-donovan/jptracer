@@ -24,7 +24,6 @@ public class Glass extends BSDF {
         } else {
             return refract(direction, normal, ior);
         }
-
     }
 
     @Override

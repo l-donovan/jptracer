@@ -19,7 +19,7 @@ public class Main {
         // The following line is for testing purposes only
         args = new String[] { "scene.json", "render.bmp" };
 
-        if (args.length < 2) {
+        if (args.length != 2) {
             System.out.println("Usage: jptracer <scene> <outfile>");
             System.exit(1);
         } else {

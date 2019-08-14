@@ -1,21 +1,27 @@
 package jptracer.tracelib.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 import jptracer.tracelib.basetypes.*;
 import jptracer.tracelib.helper.PreloadedQueue;
 import jptracer.tracelib.helper.RenderThread;
 import jptracer.tracelib.helper.SlottedList;
 import jptracer.tracelib.helper.Vec3;
+import jptracer.tracelib.primitives.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 
 import static jptracer.tracelib.basetypes.Intersection.NO_INTERSECTION;
 
 public class Core {
+    private static final Logger logger = Logger.getLogger(Core.class.getName());
+
     public static Vec3 reflect(Vec3 d, Vec3 n) {
         return d.sub(n.mul(d.dot(n)).mul(2.0));
     }
@@ -85,11 +91,12 @@ public class Core {
         Vec3 color = new Vec3(0.0, 0.0, 0.0);
         Vec3 throughput = new Vec3(1.0, 1.0, 1.0);
 
+        Intersection intersection;
+
         for (int i = 0; i < options.maxDepth; i++) {
-            Intersection intersection = checkIntersection(pos, dir, scene.objects);
+            intersection = checkIntersection(pos, dir, scene.objects);
 
             if (!intersection.didIntersect()) {
-                color.eqadd(throughput.mul(scene.backgroundColor));
                 break;
             }
 
@@ -99,7 +106,7 @@ public class Core {
 
             color.eqadd(throughput.mul(material.emittance));
 
-            Vec3 normal = intersectionObject.normal(pos, intersectionPos);
+            Vec3 normal = intersectionObject.normal(pos, dir, intersectionPos);
             Vec3 wi = material.bsdf.resultantRay(dir, normal);
             double pdf = material.bsdf.pdf(dir, normal);
 
@@ -120,7 +127,7 @@ public class Core {
     }
 
     public static Vec3[][] renderScene(Scene scene, Camera camera, Options options) {
-        System.out.println("Rendering scene...");
+        logger.info("Rendering scene...");
         long u = System.currentTimeMillis();
         camera.updateCachedValues();
 
@@ -140,7 +147,7 @@ public class Core {
         try {
             outList.waitUntilFull();
         } catch (TimeoutException e) {
-            e.printStackTrace();
+            logger.severe(e.toString());
         }
 
         Vec3[][] screen = new Vec3[camera.res_y][camera.res_x];
@@ -149,7 +156,7 @@ public class Core {
         }
 
         long v = System.currentTimeMillis();
-        System.out.println(String.format("\nScene took %f seconds to render", (v - u) / 1000.0));
+        logger.info(String.format("%nScene took %f seconds to render", (v - u) / 1000.0));
 
         return screen;
     }
@@ -161,9 +168,9 @@ public class Core {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 out.setRGB(x, y, new Color(
-                    (int) (pixels[y][x].x * 0xff),
-                    (int) (pixels[y][x].y * 0xff),
-                    (int) (pixels[y][x].z * 0xff)).getRGB());
+                        (int) (pixels[y][x].x * 0xff),
+                        (int) (pixels[y][x].y * 0xff),
+                        (int) (pixels[y][x].z * 0xff)).getRGB());
             }
         }
         return out;
@@ -171,6 +178,14 @@ public class Core {
 
     public static SceneContainer loadScene(String filename) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
+        Map<Class<?>, String> x;
+        mapper.registerSubtypes(
+                new NamedType(Sphere.class, "sphere"),
+                new NamedType(Plane.class, "plane"),
+                new NamedType(Triangle.class, "triangle"),
+                new NamedType(Quad.class, "quad"),
+                new NamedType(Mesh.class, "mesh"),
+                new NamedType(Box.class, "box"));
         return mapper.readValue(new File(filename), SceneContainer.class);
     }
 }

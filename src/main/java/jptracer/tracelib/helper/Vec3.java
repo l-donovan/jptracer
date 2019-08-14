@@ -30,7 +30,7 @@ public class Vec3 {
         return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 
-    public double mag() {
+    private double mag() {
         return Math.sqrt(this.mag2());
     }
 
@@ -41,6 +41,20 @@ public class Vec3 {
             return new Vec3(0, 0, 0);
         } else {
             return new Vec3(this.x / m, this.y / m, this.z / m);
+        }
+    }
+
+    public void eqnorm() {
+        double m = this.mag();
+
+        if (m == 0.0) {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+        } else {
+            this.x /= m;
+            this.y /= m;
+            this.z /= m;
         }
     }
 
@@ -126,11 +140,5 @@ public class Vec3 {
 
     public Vec3 neg() {
         return new Vec3(-this.x, -this.y, -this.z);
-    }
-
-    public double angle(Vec3 v) {
-        double m1 = this.mag(), m2 = v.mag();
-        double d = this.dot(v);
-        return Math.acos(d / (m1 * m2));
     }
 }

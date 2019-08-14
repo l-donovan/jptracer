@@ -44,7 +44,7 @@ public class Sphere extends SceneObject {
     }
 
     @Override
-    public Vec3 normal(Vec3 p, Vec3 q) {
-        return q.sub(this.pos).norm();
+    public Vec3 normal(Vec3 pos, Vec3 dir, Vec3 hitPos) {
+        return hitPos.sub(this.pos).norm();
     }
 }

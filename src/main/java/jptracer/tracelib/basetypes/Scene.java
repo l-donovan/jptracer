@@ -1,14 +1,18 @@
 package jptracer.tracelib.basetypes;
 
-import jptracer.tracelib.helper.Vec3;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
 public class Scene {
-    public Vec3 backgroundColor;
-
     public SceneObject[] objects;
     public Map<String, Material> materials;
 
-    public Scene() {}
+    @JsonCreator
+    public Scene(@JsonProperty("objects") SceneObject[] objects,
+                 @JsonProperty("materials") Map<String, Material> materials) {
+        this.objects = objects;
+        this.materials = materials;
+    }
 }

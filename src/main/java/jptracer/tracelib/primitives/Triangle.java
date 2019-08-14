@@ -1,5 +1,7 @@
 package jptracer.tracelib.primitives;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jptracer.tracelib.basetypes.Intersection;
 import jptracer.tracelib.basetypes.SceneObject;
 import jptracer.tracelib.helper.Vec3;
@@ -7,14 +9,24 @@ import jptracer.tracelib.helper.Vec3;
 import static jptracer.tracelib.basetypes.Intersection.getPlanarNormal;
 
 public class Triangle extends SceneObject {
-    public Vec3 v0, v1, v2;
-
-    public Triangle() {}
+    private Vec3 v0;
+    private Vec3 v1;
+    private Vec3 v2;
 
     public Triangle(Vec3 v0, Vec3 v1, Vec3 v2, String materialName) {
         this.v0 = v0;
         this.v1 = v1;
         this.v2 = v2;
+        this.materialName = materialName;
+    }
+
+    @JsonCreator
+    public Triangle(
+            @JsonProperty("vertices") Vec3[] vertices,
+            @JsonProperty("materialName") String materialName) {
+        this.v0 = vertices[0];
+        this.v1 = vertices[1];
+        this.v2 = vertices[2];
         this.materialName = materialName;
     }
 
@@ -47,7 +59,7 @@ public class Triangle extends SceneObject {
     }
 
     @Override
-    public Vec3 normal(Vec3 p, Vec3 q) {
-        return getPlanarNormal(p, this.v0, this.v0, this.v2);
+    public Vec3 normal(Vec3 pos, Vec3 dir, Vec3 hitPos) {
+        return getPlanarNormal(pos, this.v0, this.v1, this.v2);
     }
 }

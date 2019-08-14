@@ -10,25 +10,25 @@ public class MathUtils {
     }
 
     public static Vec3 randomUnitVecInHemisphere(Vec3 n, double k) {
-        double th = Math.acos(n.y)       + k * Math.PI * randInRange(-0.5, 0.5),
-               ph = Math.atan2(n.z, n.x) + k * Math.PI * randInRange(-1.0, 1.0);
+        double th = Math.acos(n.y) + k * Math.PI * randInRange(-0.5, 0.5);
+        double ph = Math.atan2(n.z, n.x) + k * Math.PI * randInRange(-1.0, 1.0);
 
         return new Vec3(
-            Math.sin(th) * Math.cos(ph),
-            Math.cos(th),
-            Math.sin(th) * Math.sin(ph)
+                Math.sin(th) * Math.cos(ph),
+                Math.cos(th),
+                Math.sin(th) * Math.sin(ph)
         );
     }
 
-    public static Vec3 rot(Vec3 v, double cos_rx, double cos_ry, double cos_rz, double sin_rx, double sin_ry, double sin_rz) {
-        double c1 = cos_rx * v.z - sin_rx * v.y;
-        double c2 = cos_rx * v.y + sin_rx * v.z;
-        double c3 = cos_ry * v.x - sin_ry * c1;
+    public static Vec3 rot(Vec3 v, double cosRotX, double cosRotY, double cosRotZ, double sinRotX, double sinRotY, double sinRotZ) {
+        double c1 = cosRotX * v.z - sinRotX * v.y;
+        double c2 = cosRotX * v.y + sinRotX * v.z;
+        double c3 = cosRotY * v.x - sinRotY * c1;
 
         return new Vec3(
-                cos_rz * c3 + sin_rz * c2,
-                cos_rz * c2 - sin_rz * c3,
-                cos_ry * c1 + sin_ry * v.x
+                cosRotZ * c3 + sinRotZ * c2,
+                cosRotZ * c2 - sinRotZ * c3,
+                cosRotY * c1 + sinRotY * v.x
         );
     }
 

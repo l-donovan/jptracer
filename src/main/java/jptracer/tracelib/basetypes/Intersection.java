@@ -41,6 +41,8 @@ public class Intersection {
             n = n.neg();
         }
 
-        return n.norm();
+        n.eqnorm();
+
+        return n;
     }
 }

@@ -29,9 +29,4 @@ public class Lambert extends BSDF {
     public double pdf(Vec3 direction, Vec3 normal) {
         return direction.neg().dot(normal) * Math.PI;
     }
-
-    public Lambert withDiffuseColor(Vec3 diffuseColor) {
-        this.diffuseColor = diffuseColor;
-        return this;
-    }
 }

@@ -15,8 +15,8 @@ public class Plane extends SceneObject implements Serializable {
 
     @JsonCreator
     public Plane(
-            @JsonProperty("materialName") String materialName,
-            @JsonProperty("vertices") Vec3[] vertices) {
+            @JsonProperty("vertices") Vec3[] vertices,
+            @JsonProperty("materialName") String materialName) {
         this.materialName = materialName;
         this.v0 = vertices[0];
         this.v1 = vertices[1];
@@ -46,7 +46,7 @@ public class Plane extends SceneObject implements Serializable {
     }
 
     @Override
-    public Vec3 normal(Vec3 p, Vec3 q) {
-        return getPlanarNormal(p, this.v0, this.v1, this.v2);
+    public Vec3 normal(Vec3 pos, Vec3 dir, Vec3 hitPos) {
+        return getPlanarNormal(pos, this.v0, this.v1, this.v2);
     }
 }
